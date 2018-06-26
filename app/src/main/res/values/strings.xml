@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Street Smart</string>
+
+    <string name="errorMsg">Error occurred please try again</string>
+
+    <string name="haveFunText">You want to have fun?</string>
+    <string name="signInThenText">***Sign in then***</string>
+    <string name="signInText">Sign in</string>
+    <string name="registrationQuestion">Or, make new account!</string>
+    <string name="forgotPasswordQuestionText">Forgot password?</string>
+    <string name="forgotPasswordText">Forgot password</string>
+
+    <string name="hintUsername">Enter username</string>
+    <string name="hintPassword">Enter password</string>
+    <string name="hintConfirmPassword">Confirm password</string>
+    <string name="hintPasswordNew">Enter new password</string>
+    <string name="hintConfirmPasswordNew">Confirm new password</string>
+    <string name="hintFirstName">Enter first name</string>
+    <string name="hintLastName">Enter last name</string>
+    <string name="hintPhoneNumber">Enter phone number</string>
+
+    <string name="registrationText">Registration</string>
+    <string name="backText">Back</string>
+    <string name="finishText">Finish</string>
+
+    <string name="profilePhotoText">Pick profile photo:</string>
+
+</resources>
