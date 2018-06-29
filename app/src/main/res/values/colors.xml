@@ -8,4 +8,8 @@
     <color name="logoColor">#0f8632</color>
     <color name="backColor">#d60f19</color>
     <color name="finishColor">#18b747</color>
+
+
+    <color name="footer_background">#ded2d2d2</color>
+    <color name="text_color_selected">#00a2e8</color>
 </resources>

@@ -1,17 +1,19 @@
-package com.jovan_ristic.streetsmart;
+package com.jovan_ristic.streetsmart.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+import com.jovan_ristic.streetsmart.R;
+
+public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try
         {
-            setContentView(R.layout.activity_forgot_password);
+            setContentView(R.layout.activity_profile);
         }
         catch(Exception | OutOfMemoryError e)
         {

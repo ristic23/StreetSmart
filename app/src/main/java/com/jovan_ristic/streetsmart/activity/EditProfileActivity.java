@@ -1,17 +1,19 @@
-package com.jovan_ristic.streetsmart;
+package com.jovan_ristic.streetsmart.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class RegistrationActivity extends AppCompatActivity {
+import com.jovan_ristic.streetsmart.R;
+
+public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try
         {
-            setContentView(R.layout.activity_registration);
+            setContentView(R.layout.activity_edit_profile);
         }
         catch(Exception | OutOfMemoryError e)
         {

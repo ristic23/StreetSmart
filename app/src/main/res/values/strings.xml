@@ -25,4 +25,9 @@
 
     <string name="profilePhotoText">Pick profile photo:</string>
 
+    <string name="profileFooterText">Profile</string>
+    <string name="mapFooterText">Map</string>
+    <string name="friendsFooterText">Friend</string>
+    <string name="rankListFooterText">Rank List</string>
+
 </resources>
