@@ -18,6 +18,7 @@
     <string name="hintFirstName">Enter first name</string>
     <string name="hintLastName">Enter last name</string>
     <string name="hintPhoneNumber">Enter phone number</string>
+    <string name="hintEmail">Enter email</string>
 
     <string name="registrationText">Registration</string>
     <string name="backText">Back</string>
@@ -27,7 +28,20 @@
 
     <string name="profileFooterText">Profile</string>
     <string name="mapFooterText">Map</string>
-    <string name="friendsFooterText">Friend</string>
+    <string name="friendsFooterText">Friends</string>
     <string name="rankListFooterText">Rank List</string>
 
+    <string name="editText">Edit</string>
+    <string name="rankText">Rank</string>
+    <string name="questionsTextView">Questions</string>
+    <string name="log_outText">Log out</string>
+    <string name="active_questionsTextView">Active Questions</string>
+
+    <string name="searchText">Search</string>
+    <string name="addNewQuestionText">Add New</string>
+    <string name="friendsListText">List of friends:</string>
+
+    <string name="addNewFriendText">Add New Friend</string>
+
+    <string name="tapToChangeText">Tap image to change it</string>
 </resources>

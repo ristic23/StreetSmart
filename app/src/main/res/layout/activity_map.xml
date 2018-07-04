@@ -6,6 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".activity.MapActivity">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/headerHolder"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_45sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:id="@+id/searchBtn"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/editTextView"
+            android:src="@drawable/btn_search"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"/>
+        <TextView
+            android:id="@+id/editTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/searchBtn"
+            app:layout_constraintLeft_toLeftOf="@+id/searchBtn"
+            app:layout_constraintRight_toRightOf="@+id/searchBtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/searchText"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/textLogo"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:text="@string/app_name"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/logoColor"
+            android:textSize="@dimen/_30sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/searchBtn"
+            app:layout_constraintRight_toLeftOf="@+id/addQuestion"/>
+
+
+        <ImageView
+            android:id="@+id/addQuestion"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/log_out_TextView"
+            android:src="@drawable/add_question"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"/>
+        <TextView
+            android:id="@+id/log_out_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/addQuestion"
+            app:layout_constraintLeft_toLeftOf="@+id/addQuestion"
+            app:layout_constraintRight_toRightOf="@+id/addQuestion"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/addNewQuestionText"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="#000000"/>
+
+    </android.support.constraint.ConstraintLayout>
 
 
     <!--Footer bar starts-->
@@ -19,11 +87,18 @@
         android:background="@color/footer_background">
 
         <ImageView
+            android:id="@+id/grayLine"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_3sdp"
+            android:background="@color/footer_line"/>
+
+        <ImageView
             android:id="@+id/profile_btn"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_profile"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/profileText"
             app:layout_constraintRight_toLeftOf="@+id/map_btn"/>
@@ -45,7 +120,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_map_selected"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/profile_btn"
             app:layout_constraintBottom_toTopOf="@+id/mapText"
             app:layout_constraintRight_toLeftOf="@+id/friends_btn"/>
@@ -67,7 +142,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_friends"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/map_btn"
             app:layout_constraintBottom_toTopOf="@+id/friendsText"
             app:layout_constraintRight_toLeftOf="@+id/rankList_btn"/>
@@ -89,7 +164,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_rank_list"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/friends_btn"
             app:layout_constraintBottom_toTopOf="@+id/rankListText"
             app:layout_constraintRight_toRightOf="parent"/>

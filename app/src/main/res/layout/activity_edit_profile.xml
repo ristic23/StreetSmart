@@ -6,4 +6,182 @@
     android:layout_height="match_parent"
     tools:context=".activity.EditProfileActivity">
 
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_120sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tapToChangeTextView">
+
+
+        <ImageView
+            android:id="@+id/cameraImg"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/pickedImg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/btn_camera"/>
+        <ImageView
+            android:id="@+id/pickedImg"
+            android:layout_width="@dimen/_115sdp"
+            android:layout_height="@dimen/_115sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/cameraImg"
+            app:layout_constraintRight_toLeftOf="@+id/galleryImg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"/>
+        <ImageView
+            android:id="@+id/galleryImg"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/pickedImg"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/btn_gallery"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tapToChangeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/middleGuideLine"
+        android:text="@string/tapToChangeText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/firstName"/>
+
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/middleGuideLine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3"/>
+
+    <EditText
+        android:id="@+id/firstName"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@+id/tapToChangeTextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/lastName"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:hint="@string/hintFirstName"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="textNoSuggestions"/>
+
+    <EditText
+        android:id="@+id/lastName"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@+id/tapToChangeTextView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/firstName"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:hint="@string/hintLastName"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="textNoSuggestions"/>
+    <EditText
+        android:id="@+id/userNameEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/lastName"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:hint="@string/hintUsername"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="textNoSuggestions"
+        />
+
+    <EditText
+        android:id="@+id/enterPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/userNameEditText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/lastName"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:hint="@string/hintPassword"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/confirmPasswordEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/userNameEditText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/firstName"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:hint="@string/hintConfirmPassword"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:hint="@string/hintPhoneNumber"
+        android:textSize="@dimen/_10sdp"
+        android:inputType="phone"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/backBtn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:text="@string/backText"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/finishBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@color/backColor"
+        android:layout_margin="@dimen/_3sdp"/>
+
+    <TextView
+        android:id="@+id/finishBtn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_30sdp"
+        android:text="@string/finishText"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@color/finishColor"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/backBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_weight="2"
+        android:layout_margin="@dimen/_3sdp"/>
+
 </android.support.constraint.ConstraintLayout>

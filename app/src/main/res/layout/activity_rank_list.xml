@@ -6,6 +6,152 @@
     android:layout_height="match_parent"
     tools:context=".activity.RankListActivity">
 
+    <ImageView
+        android:id="@+id/grayLine2"
+        app:layout_constraintTop_toTopOf="@+id/middleGuideLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_4sdp"
+        android:background="@color/footer_line"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/middleGuideLine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/secondPlaceHolder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuideLine"
+        app:layout_constraintRight_toLeftOf="@+id/firstPlaceHolder"
+        android:layout_margin="@dimen/_5sdp">
+        
+        <TextView
+            android:id="@+id/secondTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/middleGuideLine2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Ime Prezime"
+            android:gravity="center"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/middleGuideLine2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35"/>
+
+
+        <ImageView
+            android:id="@+id/secondImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@+id/middleGuideLine2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/silver"
+            app:layout_constraintDimensionRatio="w,254:195"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/firstPlaceHolder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toLeftOf="@+id/thirdPlaceHolder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuideLine"
+        app:layout_constraintLeft_toRightOf="@+id/secondPlaceHolder"
+        android:layout_margin="@dimen/_5sdp">
+
+        <TextView
+            android:id="@+id/firstTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/middleGuideLine3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Ime Prezime"
+            android:gravity="center"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/middleGuideLine3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2"/>
+
+        <ImageView
+            android:id="@+id/firstImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/middleGuideLine3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/gold"
+            app:layout_constraintDimensionRatio="w,256:228"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/thirdPlaceHolder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toRightOf="@+id/firstPlaceHolder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuideLine"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="@dimen/_5sdp">
+
+        <TextView
+            android:id="@+id/thirdTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/middleGuideLine4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Ime Prezime"
+            android:gravity="center"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/middleGuideLine4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.45"/>
+
+        <ImageView
+            android:id="@+id/threeImg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/middleGuideLine4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:src="@drawable/bronze"
+            app:layout_constraintDimensionRatio="w,255:195"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rankListRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/middleGuideLine"
+        app:layout_constraintBottom_toTopOf="@+id/footerHolder"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_1sdp"/>
+
 
     <!--Footer bar starts-->
     <android.support.constraint.ConstraintLayout
@@ -18,11 +164,18 @@
         android:background="@color/footer_background">
 
         <ImageView
+            android:id="@+id/grayLine"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_3sdp"
+            android:background="@color/footer_line"/>
+
+        <ImageView
             android:id="@+id/profile_btn"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_profile"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/profileText"
             app:layout_constraintRight_toLeftOf="@+id/map_btn"/>
@@ -44,7 +197,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_map"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/profile_btn"
             app:layout_constraintBottom_toTopOf="@+id/mapText"
             app:layout_constraintRight_toLeftOf="@+id/friends_btn"/>
@@ -66,7 +219,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_friends"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/map_btn"
             app:layout_constraintBottom_toTopOf="@+id/friendsText"
             app:layout_constraintRight_toLeftOf="@+id/rankList_btn"/>
@@ -88,7 +241,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/btn_rank_list_selected"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grayLine"
             app:layout_constraintLeft_toRightOf="@+id/friends_btn"
             app:layout_constraintBottom_toTopOf="@+id/rankListText"
             app:layout_constraintRight_toRightOf="parent"/>

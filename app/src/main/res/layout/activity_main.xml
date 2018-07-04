@@ -33,11 +33,11 @@
     <TextView
         android:id="@+id/textSignIn"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_20sdp"
+        android:layout_height="@dimen/_30sdp"
         android:text="@string/signInThenText"
         android:gravity="center"
         android:textColor="#000000"
-        android:textSize="@dimen/_10sdp"
+        android:textSize="@dimen/_15sdp"
         app:layout_constraintTop_toBottomOf="@+id/textHaveFun"
         android:layout_marginTop="@dimen/_20sdp"/>
 
@@ -53,10 +53,10 @@
         android:layout_marginStart="@dimen/_40sdp"
         android:layout_marginEnd="@dimen/_40sdp"
         android:layout_marginRight="@dimen/_40sdp"
-        android:hint="@string/hintUsername"
+        android:hint="@string/hintEmail"
         android:textColorHint="@color/logoColor"
         android:textSize="@dimen/_15sdp"
-        android:inputType="textNoSuggestions"/>
+        android:inputType="textEmailAddress"/>
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
@@ -74,7 +74,7 @@
         android:textSize="@dimen/_15sdp"
         android:inputType="textPassword"/>
     <TextView
-        android:id="@+id/finishBtn"
+        android:id="@+id/signInBtn"
         android:layout_width="0dp"
         android:layout_height="@dimen/_30sdp"
         android:text="@string/signInText"
@@ -92,12 +92,12 @@
     <TextView
         android:id="@+id/registrationText"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_20sdp"
+        android:layout_height="@dimen/_30sdp"
         android:text="@string/registrationQuestion"
         android:gravity="center"
         android:textColor="#0992f4"
-        android:textSize="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@+id/finishBtn"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintTop_toBottomOf="@+id/signInBtn"
         android:layout_marginTop="@dimen/_20sdp"/>
 
     <TextView
@@ -109,7 +109,8 @@
         android:textColor="#c2121d"
         android:textSize="@dimen/_10sdp"
         app:layout_constraintTop_toBottomOf="@+id/registrationText"
-        android:layout_marginTop="@dimen/_40sdp"/>
+        android:layout_marginTop="@dimen/_40sdp"
+        android:visibility="gone"/>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/footerPageView"
