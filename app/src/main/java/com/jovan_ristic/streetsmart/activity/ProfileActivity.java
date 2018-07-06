@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
+import com.jovan_ristic.streetsmart.helpers.AppManager;
 
 import org.w3c.dom.Text;
 
@@ -50,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         auth = FirebaseAuth.getInstance();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference Ref = mDatabase.child(auth.getUid());
-
+        AppManager.getInstance().DefaultValues();
         Ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -72,10 +73,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-
-
-        //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         authListener = new FirebaseAuth.AuthStateListener() {

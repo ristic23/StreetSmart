@@ -44,4 +44,9 @@
     <string name="addNewFriendText">Add New Friend</string>
 
     <string name="tapToChangeText">Tap image to change it</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="cancelText">Cancel</string>
+    <string name="addText">Add</string>
 </resources>

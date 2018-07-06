@@ -16,8 +16,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jovan_ristic.streetsmart.Model.Friend;
+import com.jovan_ristic.streetsmart.Model.Question;
 import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
+
+import java.util.ArrayList;
 
 public class RegistrationActivity extends AppCompatActivity  implements View.OnClickListener
 {
@@ -147,6 +151,14 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
                                             user.setUserName(userNameS);
                                             user.setPhone(phoneNumberS);
                                             user.setEmail(emailS);
+                                            user.setImagePath("");
+                                            user.setActiveQuestions(new ArrayList<Question>());
+                                            user.setFriendsList(new ArrayList<Friend>());
+                                            user.setRank(0);
+                                            user.setTotalPoints(0);
+                                            user.setLatitude(0);
+                                            user.setLongitude(0);
+
 
                                             Ref.setValue(user);
 

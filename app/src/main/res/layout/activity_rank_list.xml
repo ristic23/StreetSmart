@@ -56,8 +56,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/silver"
-            app:layout_constraintDimensionRatio="w,254:195"/>
+            android:background="@drawable/silver"
+            app:layout_constraintDimensionRatio="h,254:195"/>
 
     </android.support.constraint.ConstraintLayout>
 
@@ -97,7 +97,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:src="@drawable/gold"
-            app:layout_constraintDimensionRatio="w,256:228"/>
+            app:layout_constraintDimensionRatio="h,256:228"/>
 
     </android.support.constraint.ConstraintLayout>
 
@@ -136,7 +136,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:src="@drawable/bronze"
+            android:background="@drawable/bronze"
             app:layout_constraintDimensionRatio="w,255:195"/>
 
     </android.support.constraint.ConstraintLayout>

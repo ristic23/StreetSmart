@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.jovan_ristic.streetsmart.R;
+import com.jovan_ristic.streetsmart.helpers.AppManager;
+import com.jovan_ristic.streetsmart.helpers.GPSTracker;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -16,7 +18,6 @@ public class LoadingActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     private ProgressBar progressBar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

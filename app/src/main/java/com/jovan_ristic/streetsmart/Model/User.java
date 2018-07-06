@@ -1,6 +1,7 @@
 package com.jovan_ristic.streetsmart.Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class User
 {
@@ -14,13 +15,13 @@ public class User
 
     private String phone;
 
-    private ArrayList<Question> activeQuestions;
-    private ArrayList<Friend> friendsList;
+    private List<Question> activeQuestions;
+    private List<Friend> friendsList;
 
     private int totalPoints;
     private int rank;
 
-    private long langitude, longitude;
+    private long latitude, longitude;
 
 
     public User()
@@ -30,7 +31,7 @@ public class User
         activeQuestions = new ArrayList<>();
         friendsList = new ArrayList<>();
 
-        longitude = langitude = 0;
+        longitude = latitude = 0;
     }
 
 
@@ -66,19 +67,19 @@ public class User
         this.imagePath = imagePath;
     }
 
-    public ArrayList<Question> getActiveQuestions() {
+    public List<Question> getActiveQuestions() {
         return activeQuestions;
     }
 
-    public void setActiveQuestions(ArrayList<Question> activeQuestions) {
+    public void setActiveQuestions(List<Question> activeQuestions) {
         this.activeQuestions = activeQuestions;
     }
 
-    public ArrayList<Friend> getFriendsList() {
+    public List<Friend> getFriendsList() {
         return friendsList;
     }
 
-    public void setFriendsList(ArrayList<Friend> friendsList) {
+    public void setFriendsList(List<Friend> friendsList) {
         this.friendsList = friendsList;
     }
 
@@ -98,12 +99,12 @@ public class User
         this.rank = rank;
     }
 
-    public long getLangitude() {
-        return langitude;
+    public long getLatitude() {
+        return latitude;
     }
 
-    public void setLangitude(long langitude) {
-        this.langitude = langitude;
+    public void setLatitude(long latitude) {
+        this.latitude = latitude;
     }
 
     public long getLongitude() {
