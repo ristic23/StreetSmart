@@ -625,7 +625,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/seekBarRadius"
                     app:layout_constraintLeft_toRightOf="@+id/showAllUsers"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:layout_margin="@dimen/_5sdp"/>
+                    android:layout_margin="@dimen/_5sdp"
+                    />
 
 
         </android.support.constraint.ConstraintLayout>

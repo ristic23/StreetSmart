@@ -145,28 +145,19 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
 
     private void collectLocationUsers(Map<String, Object> users)
     {
-        try
-        {
-            if(friendMarkers != null)
-            {
-                for (Marker ma: friendMarkers)
-                {
+        try {
+            if (friendMarkers != null) {
+                for (Marker ma : friendMarkers) {
                     ma.remove();
                 }
-            }
-            else
-            {
+            } else {
                 friendMarkers = new ArrayList<>();
             }
-            if(questionsMarkersUsers != null)
-            {
-                for (Marker ma: questionsMarkersUsers)
-                {
+            if (questionsMarkersUsers != null) {
+                for (Marker ma : questionsMarkersUsers) {
                     ma.remove();
                 }
-            }
-            else
-            {
+            } else {
                 questionsMarkersUsers = new ArrayList<>();
             }
 
@@ -175,53 +166,43 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
                 LatLng myCoordinate = new LatLng((double) singleUser.get("latitude"), (double) singleUser.get("longitude"));
                 String name = String.valueOf(singleUser.get("userName"));
                 double distanceCalculated = distance(latitude, longitude, myCoordinate.latitude, myCoordinate.longitude);
-                if(radiusSet == -1 || (radiusSet) >= distanceCalculated) {
-                    if (!myUserName.equalsIgnoreCase(name) && googleMapAppManager != null)
-                    {
+                if (radiusSet == -1 || (radiusSet) >= distanceCalculated) {
+                    if (!myUserName.equalsIgnoreCase(name) && googleMapAppManager != null) {
                         MarkerOptions tempMarker = new MarkerOptions().position(myCoordinate).title(name)
                                 .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(mFriendMarkerView, R.drawable.avatar)));
                         friendMarkers.add(googleMapAppManager.addMarker(tempMarker));
-                        ArrayList<HashMap> tempQs =  (ArrayList<HashMap>) singleUser.get("activeQuestions");
-                        for (int i = 0; i < tempQs.size(); i++)
-                        {
-                            Question newQuestion = new Question();
-//                            newQuestion = (Question)tempQs.get(i);
-//                            newQuestion.setHeaderQ(newQuestion.getHeaderQ());
-//                            newQuestion.setBodyQ(newQuestion.getBodyQ());
-//                            newQuestion.setaA(newQuestion.getaA());
-//                            newQuestion.setaB(newQuestion.getaB());
-//                            newQuestion.setaC(newQuestion.getaC());
-//                            newQuestion.setaD(newQuestion.getaD());
-//                            newQuestion.setBooleanA(newQuestion.isBooleanA());
-//                            newQuestion.setBooleanB(newQuestion.isBooleanB());
-//                            newQuestion.setBooleanC(newQuestion.isBooleanC());
-//                            newQuestion.setBooleanD(newQuestion.isBooleanD());
-//                            newQuestion.setLongitude(newQuestion.getLongitude());
-//                            newQuestion.setLatitude(newQuestion.getLatitude());
+                    }
+                }
 
+
+                    ArrayList<HashMap> tempQs = (ArrayList<HashMap>) singleUser.get("activeQuestions");
+                    for (int i = 0; i < tempQs.size(); i++) {
+                        Question newQuestion = new Question();
+                        newQuestion.setLongitude((double) (tempQs.get(i).get("longitude")));
+                        newQuestion.setLatitude((double) (tempQs.get(i).get("latitude")));
+                        distanceCalculated = distance(latitude, longitude, newQuestion.getLatitude(), newQuestion.getLongitude());
+                        if (radiusSet == -1 || (radiusSet) >= distanceCalculated)
+                        {
                             newQuestion.setHeaderQ(String.valueOf(tempQs.get(i).get("headerQ")));
                             newQuestion.setBodyQ(String.valueOf(tempQs.get(i).get("bodyQ")));
                             newQuestion.setaA(String.valueOf(tempQs.get(i).get("aA")));
                             newQuestion.setaB(String.valueOf(tempQs.get(i).get("aB")));
                             newQuestion.setaC(String.valueOf(tempQs.get(i).get("aC")));
                             newQuestion.setaD(String.valueOf(tempQs.get(i).get("aD")));
-                            newQuestion.setBooleanA((boolean)(tempQs.get(i).get("booleanA")));
-                            newQuestion.setBooleanB((boolean)(tempQs.get(i).get("booleanB")));
-                            newQuestion.setBooleanC((boolean)(tempQs.get(i).get("booleanC")));
-                            newQuestion.setBooleanD((boolean)(tempQs.get(i).get("booleanD")));
-                            newQuestion.setLongitude((double)(tempQs.get(i).get("longitude")));
-                            newQuestion.setLatitude((double)(tempQs.get(i).get("latitude")));
+                            newQuestion.setBooleanA((boolean) (tempQs.get(i).get("booleanA")));
+                            newQuestion.setBooleanB((boolean) (tempQs.get(i).get("booleanB")));
+                            newQuestion.setBooleanC((boolean) (tempQs.get(i).get("booleanC")));
+                            newQuestion.setBooleanD((boolean) (tempQs.get(i).get("booleanD")));
+
                             questionsData.add(newQuestion);
-                            LatLng myCoordinate2 = new LatLng(newQuestion.getLatitude(),  newQuestion.getLongitude());
+                            LatLng myCoordinate2 = new LatLng(newQuestion.getLatitude(), newQuestion.getLongitude());
                             questionsMarkersUsers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate2).title(newQuestion.getHeaderQ())
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
                             questionsMarkersUsers.get(indexQ).setTag(countQ);
                             countQ++;
                             indexQ++;
-                        }
                     }
                 }
-
             }
         }
         catch (Exception e)

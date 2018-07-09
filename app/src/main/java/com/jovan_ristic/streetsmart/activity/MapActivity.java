@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -212,6 +213,20 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
             }
         });
 
+        usersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    AppManager.getInstance().setRadiusSet(-1);
+                }
+                else
+                {
+                    AppManager.getInstance().setRadiusSet(radiusSeekBar.getProgress());
+                }
+                AppManager.getInstance().getUsersLocation();
+            }
+        });
+
         btnCloseNewQuestion = (TextView) findViewById(R.id.backBtn);
         btnAdd = (TextView) findViewById(R.id.finishBtn);
 
@@ -355,7 +370,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Enter answer D!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (!checkA.isChecked() || !checkB.isChecked() || !checkC.isChecked() || !checkD.isChecked() ) {
+                    if (!checkA.isChecked() && !checkB.isChecked() && !checkC.isChecked() && !checkD.isChecked() ) {
                         Toast.makeText(getApplicationContext(), "Check correct answer!", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -377,6 +392,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                     user.addNewQuestion(newQuestion);
                     Ref.child("activeQuestions").setValue(user.getActiveQuestions());
                     AppManager.getInstance().setQuestionMarkers();
+                    addQuestionPopUp.setVisibility(View.GONE);
                 }
                 else
                 {
