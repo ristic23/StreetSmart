@@ -16,24 +16,40 @@
         app:layout_constraintBottom_toTopOf="@+id/footerHolder">
 
 
-        <TextView
-            android:id="@+id/listFriendsTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+        <android.support.v7.widget.CardView
+            android:id="@+id/bluetoothSwitcherHolder"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             app:layout_constraintTop_toTopOf="parent"
-            android:textSize="@dimen/_25sdp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="#000000"
-            android:text="@string/friendsListText"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/listFriendsRecyclerView"
+            android:layout_margin="@dimen/_5sdp"
+            app:cardCornerRadius="@dimen/_5sdp"
+            app:cardElevation="@dimen/_5sdp"
+            app:cardUseCompatPadding="true">
 
-        <android.support.v7.widget.RecyclerView
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+               <ImageView
+                   android:id="@+id/bluetoothSwitcher"
+                   android:layout_width="0dp"
+                   android:layout_height="0dp"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintLeft_toLeftOf="parent"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintRight_toRightOf="parent"
+                   android:src="@drawable/bluetooth_disabled"
+                   />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+
+        <ListView
             android:id="@+id/listFriendsRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/listFriendsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/bluetoothSwitcherHolder"
             app:layout_constraintBottom_toTopOf="@+id/addNewBtn"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -41,7 +57,7 @@
             android:layout_marginBottom="@dimen/_1sdp">
 
 
-        </android.support.v7.widget.RecyclerView>
+        </ListView>
 
 
         <TextView

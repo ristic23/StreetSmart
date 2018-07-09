@@ -5,12 +5,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,14 +26,36 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jovan_ristic.streetsmart.Model.Question;
+import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
 import com.jovan_ristic.streetsmart.helpers.AppManager;
 import com.jovan_ristic.streetsmart.helpers.GPSTracker;
 
 public class MapActivity extends AppCompatActivity  implements View.OnClickListener, OnMapReadyCallback
 {
-    ImageView btnProfile, btnFriends, btnRankList;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private DatabaseReference parRef;
+    private DatabaseReference Ref;
 
+    private ImageView btnProfile, btnFriends, btnRankList, btnAddQuestion, searchBtn;
+
+    private User user;
+    private ConstraintLayout addQuestionPopUp, searchPopUp;
+    private TextView btnCloseNewQuestion, btnAdd, btnCloseSearch, radiusSetTextView;
+    private EditText headerQuestion, bodyQuestion, answerA, answerB, answerC, answerD;
+    private CheckBox checkA, checkB, checkC, checkD;
+
+    private SeekBar radiusSeekBar;
+    private Switch usersSwitch;
+    private boolean isMarkerClicked = false;
     private GoogleMap mMap;
     public static final int REQUEST_LOCATION_CODE = 99;
 
@@ -44,6 +73,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
         }
         gps = new GPSTracker(this);
+        auth = FirebaseAuth.getInstance();
 
         if(!gps.isGPSEnabled())
             gps.showGPSSettingsAlert();
@@ -51,6 +81,9 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
             gps.showWifiSettingsAlert();
         initLayout();
         initListeners();
+        database = FirebaseDatabase.getInstance();
+        parRef = database.getReference("users");
+        Ref = parRef.child(auth.getUid());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         {
@@ -61,7 +94,31 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
             mapFragment.getMapAsync(this);
         }
 
-        AppManager.getInstance().setMarkerLayout(this);
+        AppManager.getInstance().setMarkerUsersLayout(this);
+        AppManager.getInstance().setMarkerQuestionsLayout(this);
+
+        Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = new User();
+                user.setFirstName(dataSnapshot.getValue(User.class).getFirstName());
+                user.setLastName(dataSnapshot.getValue(User.class).getLastName());
+                user.setPhone(dataSnapshot.getValue(User.class).getPhone());
+                user.setRank(dataSnapshot.getValue(User.class).getRank());
+                user.setFriendsList(dataSnapshot.getValue(User.class).getFriendsList());
+                user.setActiveQuestions(dataSnapshot.getValue(User.class).getActiveQuestions());
+
+                if(user.getActiveQuestions().size() > 0) {
+                    AppManager.getInstance().setQuestionsData(user.getActiveQuestions());
+                    AppManager.getInstance().setQuestionMarkers();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -108,19 +165,120 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
             mMap.moveCamera(CameraUpdateFactory.newLatLng(nisMarker));
         }
         AppManager.getInstance().getUsersLocation();
+        AppManager.getInstance().setContext(MapActivity.this);
     }
 
     private void initListeners() {
         btnProfile.setOnClickListener(this);
         btnFriends.setOnClickListener(this);
         btnRankList.setOnClickListener(this);
+        btnAddQuestion.setOnClickListener(this);
+
+        btnAdd.setOnClickListener(this);
+        searchBtn.setOnClickListener(this);
+        btnCloseSearch.setOnClickListener(this);
     }
 
     private void initLayout() {
         btnProfile = findViewById(R.id.profile_btn);
         btnFriends = findViewById(R.id.friends_btn);
         btnRankList = findViewById(R.id.rankList_btn);
+        btnAddQuestion = findViewById(R.id.addQuestion);
+        addQuestionPopUp = findViewById(R.id.questionPopUp);
+        searchPopUp = findViewById(R.id.searchPopUp);
+        searchBtn = findViewById(R.id.searchBtn);
+        btnCloseSearch = findViewById(R.id.closeSearch);
 
+        radiusSeekBar = findViewById(R.id.seekBarRadius);
+        usersSwitch = findViewById(R.id.allUserSwitch);
+        radiusSetTextView = findViewById(R.id.textViewDistanceSet);
+
+        radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean b)
+            {
+                radiusSetTextView.setText(String.valueOf(progressValue) + " m");
+                AppManager.getInstance().setRadiusSet(progressValue);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        btnCloseNewQuestion = (TextView) findViewById(R.id.backBtn);
+        btnAdd = (TextView) findViewById(R.id.finishBtn);
+
+        headerQuestion = (EditText) findViewById(R.id.titleQuestion);
+        bodyQuestion = (EditText) findViewById(R.id.questionBody);
+        answerA = (EditText) findViewById(R.id.answerA);
+        answerB = (EditText) findViewById(R.id.answerB);
+        answerC = (EditText) findViewById(R.id.answerC);
+        answerD = (EditText) findViewById(R.id.answerD);
+
+        checkA = (CheckBox) findViewById(R.id.checkA);
+        checkB = (CheckBox) findViewById(R.id.checkB);
+        checkC = (CheckBox) findViewById(R.id.checkC);
+        checkD = (CheckBox) findViewById(R.id.checkD);
+
+        btnCloseNewQuestion.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                addQuestionPopUp.setVisibility(View.GONE);
+            }
+        });
+
+        //region CheckBoxs
+
+                checkA.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view) {
+                        checkA.setChecked(true);
+                        checkB.setChecked(false);
+                        checkC.setChecked(false);
+                        checkD.setChecked(false);
+                    }
+                });
+                checkB.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view) {
+                        checkA.setChecked(false);
+                        checkB.setChecked(true);
+                        checkC.setChecked(false);
+                        checkD.setChecked(false);
+                    }
+                });
+                checkC.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view) {
+                        checkA.setChecked(false);
+                        checkB.setChecked(false);
+                        checkC.setChecked(true);
+                        checkD.setChecked(false);
+                    }
+                });
+                checkD.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View view) {
+                        checkA.setChecked(false);
+                        checkB.setChecked(false);
+                        checkC.setChecked(false);
+                        checkD.setChecked(true);
+                    }
+                });
+                //endregion
     }
 
 
@@ -151,8 +309,165 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                 finish();
                 break;
             }
+            case R.id.searchBtn:
+            {
+                searchPopUp.setVisibility(View.VISIBLE);
+                break;
+            }
+            case R.id.closeSearch:
+            {
+                searchPopUp.setVisibility(View.GONE);
+                AppManager.getInstance().getUsersLocation();
+                break;
+            }
+            case R.id.finishBtn:
+            {
+                if(!isMarkerClicked) {
+                    final String headerQ = headerQuestion.getText().toString().trim();
+                    final String bodyQ = bodyQuestion.getText().toString().trim();
+                    final String aA = answerA.getText().toString().trim();
+                    final String aB = answerB.getText().toString().trim();
+                    final String aC = answerC.getText().toString().trim();
+                    final String aD = answerD.getText().toString().trim();
+
+
+                    if (TextUtils.isEmpty(headerQ)) {
+                        Toast.makeText(getApplicationContext(), "Enter question title!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(bodyQ)) {
+                        Toast.makeText(getApplicationContext(), "Enter question!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(aA)) {
+                        Toast.makeText(getApplicationContext(), "Enter answer A!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(aB)) {
+                        Toast.makeText(getApplicationContext(), "Enter answer B!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(aC)) {
+                        Toast.makeText(getApplicationContext(), "Enter answer C!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (TextUtils.isEmpty(aD)) {
+                        Toast.makeText(getApplicationContext(), "Enter answer D!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (!checkA.isChecked() || !checkB.isChecked() || !checkC.isChecked() || !checkD.isChecked() ) {
+                        Toast.makeText(getApplicationContext(), "Check correct answer!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Question newQuestion = new Question();
+                    newQuestion.setHeaderQ(headerQ);
+                    newQuestion.setBodyQ(bodyQ);
+                    newQuestion.setaA(aA);
+                    newQuestion.setaB(aB);
+                    newQuestion.setaC(aC);
+                    newQuestion.setaD(aD);
+                    newQuestion.setBooleanA(checkA.isChecked());
+                    newQuestion.setBooleanB(checkB.isChecked());
+                    newQuestion.setBooleanC(checkC.isChecked());
+                    newQuestion.setBooleanD(checkD.isChecked());
+                    newQuestion.setLongitude(AppManager.getInstance().getLongitude());
+                    newQuestion.setLatitude(AppManager.getInstance().getLatitude());
+
+                    user.addNewQuestion(newQuestion);
+                    Ref.child("activeQuestions").setValue(user.getActiveQuestions());
+                    AppManager.getInstance().setQuestionMarkers();
+                }
+                else
+                {
+                    if(questionPicked.isBooleanA() && checkA.isChecked())
+                    {
+                       correctAnswer();
+                    }
+                    else
+                    {
+                        if(questionPicked.isBooleanB() && checkB.isChecked())
+                        {
+                            correctAnswer();
+                        }
+                        else
+                        {
+                            if(questionPicked.isBooleanC() && checkC.isChecked())
+                            {
+                                correctAnswer();
+                            }
+                            else
+                            {
+                                if(questionPicked.isBooleanD() && checkD.isChecked())
+                                {
+                                    correctAnswer();
+                                }
+                                else
+                                {
+                                    Toast.makeText(getApplicationContext(), "Choose one answer!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            case R.id.addQuestion:
+            {
+                addQuestionPopUp.setVisibility(View.VISIBLE);
+                headerQuestion.setFocusable(true);
+                bodyQuestion.setFocusable(true);
+                answerA.setFocusable(true);
+                answerB.setFocusable(true);
+                answerC.setFocusable(true);
+                answerD.setFocusable(true);
+                headerQuestion.setText("");
+                bodyQuestion.setText("");
+                answerA.setText("");
+                answerB.setText("");
+                answerC.setText("");
+                answerD.setText("");
+
+                break;
+            }
         }
     }
+
+    private void correctAnswer()
+    {
+        Toast.makeText(getApplicationContext(), "You won 10 points!", Toast.LENGTH_LONG).show();
+
+        Ref.child("totalPoints").setValue(user.getTotalPoints() + 10);
+        addQuestionPopUp.setVisibility(View.GONE);
+        isMarkerClicked = false;
+    }
+
+    Question questionPicked;
+    public void markerIsClicked(Question q)
+    {
+        isMarkerClicked = true;
+        questionPicked = q;
+
+        headerQuestion.setText(questionPicked.getHeaderQ());
+        bodyQuestion.setText(questionPicked.getBodyQ());
+        answerA.setText(questionPicked.getaA());
+        answerB.setText(questionPicked.getaB());
+        answerC.setText(questionPicked.getaC());
+        answerD.setText(questionPicked.getaD());
+        checkA.setChecked(false);
+        checkB.setChecked(false);
+        checkC.setChecked(false);
+        checkD.setChecked(false);
+        headerQuestion.setFocusable(false);
+        bodyQuestion.setFocusable(false);
+        answerA.setFocusable(false);
+        answerB.setFocusable(false);
+        answerC.setFocusable(false);
+        answerD.setFocusable(false);
+
+        addQuestionPopUp.setVisibility(View.VISIBLE);
+    }
+
 
     public boolean checkLocationPermission()
     {

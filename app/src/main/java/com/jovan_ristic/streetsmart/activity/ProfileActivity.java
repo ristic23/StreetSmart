@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,21 +18,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jovan_ristic.streetsmart.Model.Friend;
+import com.jovan_ristic.streetsmart.Model.Question;
 import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
+import com.jovan_ristic.streetsmart.adapter.QuestionAdapter;
 import com.jovan_ristic.streetsmart.helpers.AppManager;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
     ImageView btnMap, btnFriends, btnRankList, btnEdit;
     ImageView btnLogOut;
 
-    TextView rankNumber, friendsNumber;
+    TextView rankNumber, friendsNumber, questionsNumber;
     TextView firstName, lastName, phone;
 
-
+    private RecyclerView questionsRecyclerView;
+    private QuestionAdapter questionsAdapter;
+    private RecyclerView.LayoutManager questionsLayoutManager;
+    private DatabaseReference mDatabase, Ref;
     User user;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
@@ -46,26 +56,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
         }
-
+        user = new User();
+        initLayout();
+        initListeners();
 
         auth = FirebaseAuth.getInstance();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-        DatabaseReference Ref = mDatabase.child(auth.getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        Ref = mDatabase.child(auth.getUid());
+
         AppManager.getInstance().DefaultValues();
         Ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = new User();
+
                 user.setFirstName(dataSnapshot.getValue(User.class).getFirstName());
                 user.setLastName(dataSnapshot.getValue(User.class).getLastName());
                 user.setPhone(dataSnapshot.getValue(User.class).getPhone());
                 user.setRank(dataSnapshot.getValue(User.class).getRank());
+                user.setFriendsList(dataSnapshot.getValue(User.class).getFriendsList());
+                user.setActiveQuestions(dataSnapshot.getValue(User.class).getActiveQuestions());
 
                 firstName.setText(user.getFirstName());
                 lastName.setText(user.getLastName());
                 phone.setText(user.getPhone());
-//                rankNumber.setText(user.getRank());
+                rankNumber.setText(String.valueOf(user.getRank()));
+                friendsNumber.setText(String.valueOf(user.getFriendsList().size()));
+                questionsNumber.setText(String.valueOf(user.getActiveQuestions().size()));
 
+                questionsAdapter.setQuestions(user.getActiveQuestions());
             }
 
             @Override
@@ -86,8 +104,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
 
-        initLayout();
-        initListeners();
+
 
     }
 
@@ -115,6 +132,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         firstName = findViewById(R.id.firstNameTextView);
         lastName = findViewById(R.id.lastNameTextView);
         phone = findViewById(R.id.numberTextView);
+        questionsNumber = findViewById(R.id.questionsNumber);
+
+        questionsRecyclerView = findViewById(R.id.activeQuestionRecyclerView);
+        questionsRecyclerView.setHasFixedSize(true);
+        questionsLayoutManager = new LinearLayoutManager(ProfileActivity.this);
+        questionsRecyclerView.setLayoutManager(questionsLayoutManager);
+        questionsAdapter = new QuestionAdapter(ProfileActivity.this, user.getActiveQuestions(),ProfileActivity.this);
+        questionsRecyclerView.setAdapter(questionsAdapter);
     }
 
 
@@ -171,6 +196,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             }
         }
+    }
+
+    public void deleteQuestion(int position)
+    {
+        Ref.child("activeQuestions").setValue(user.getActiveQuestions().remove(position));
+        questionsAdapter.notifyDataSetChanged();
     }
 
     @Override

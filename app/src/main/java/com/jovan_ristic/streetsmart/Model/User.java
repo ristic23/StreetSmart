@@ -21,7 +21,7 @@ public class User
     private int totalPoints;
     private int rank;
 
-    private long latitude, longitude;
+    private double latitude, longitude;
 
 
     public User()
@@ -75,6 +75,16 @@ public class User
         this.activeQuestions = activeQuestions;
     }
 
+    public void addNewQuestion(Question question)
+    {
+        activeQuestions.add(question);
+    }
+
+    public void addNewFriend(Friend friend)
+    {
+        friendsList.add(friend);
+    }
+
     public List<Friend> getFriendsList() {
         return friendsList;
     }
@@ -99,19 +109,19 @@ public class User
         this.rank = rank;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

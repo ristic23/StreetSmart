@@ -8,16 +8,23 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jovan_ristic.streetsmart.R;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,10 +34,6 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
     ImageView btnProfile, btnMap, btnRankList;
 
 
-    private BluetoothAdapter bluetoothAdapter;
-
-    private TextView myLabel;
-    private EditText myTextbox;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mmSocket;
     private BluetoothDevice mmDevice;
@@ -42,6 +45,10 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
     private int counter;
     private volatile boolean stopWorker;
 
+    private ImageView bluetootheSwitcher;
+    private boolean bluetoothOnOff;
+    private ListView listViewBluetooth;
+    private List<BluetoothDevice> devicesBluetooth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +60,10 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
         }
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(turnOn, BLUETOOTH_CODE);
+        bluetoothOnOff = false;
+        devicesBluetooth = new ArrayList<>();
+//        Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//        startActivityForResult(turnOn, BLUETOOTH_CODE);
         initLayout();
         initListeners();
 
@@ -66,6 +73,7 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         btnProfile.setOnClickListener(this);
         btnMap.setOnClickListener(this);
         btnRankList.setOnClickListener(this);
+        bluetootheSwitcher.setOnClickListener(this);
     }
 
     private void initLayout() {
@@ -73,6 +81,9 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         btnMap = findViewById(R.id.map_btn);
         btnRankList = findViewById(R.id.rankList_btn);
 
+        bluetootheSwitcher = findViewById(R.id.bluetoothSwitcher);
+
+        listViewBluetooth = findViewById(R.id.listFriendsRecyclerView);
     }
 
 
@@ -82,6 +93,23 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent;
         switch (view.getId())
         {
+            case R.id.bluetoothSwitcher:
+            {
+                if(!bluetoothOnOff) {
+                    findBT();
+                }
+                else
+                {
+                    try {
+                    closeBT();
+                }
+                catch (IOException e)
+                {
+                    //
+                }
+                }
+                break;
+            }
             case R.id.profile_btn:
             {
                 intent = new Intent(FriendsActivity.this, ProfileActivity.class);
@@ -110,7 +138,8 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
-            myLabel.setText("No bluetooth adapter available");
+            Toast.makeText(this,"No bluetooth adapter available", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if(!mBluetoothAdapter.isEnabled())
@@ -122,16 +151,32 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if(pairedDevices.size() > 0)
         {
+            List<String> items = new ArrayList<>();
             for(BluetoothDevice device : pairedDevices)
             {
-                if(device.getName().equals("MattsBlueTooth"))
-                {
-                    mmDevice = device;
-                    break;
-                }
+                items.add(device.getName());
+                devicesBluetooth.add(device);
+
             }
+            ArrayAdapter<String> itemsAdapter =
+                    new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+            listViewBluetooth.setAdapter(itemsAdapter);
+            listViewBluetooth.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    mmDevice = devicesBluetooth.get(i);
+                    try {
+                        openBT();
+                        sendData("BFFs???");
+                    }
+                    catch (IOException e)
+                    {
+                        //
+                    }
+                }
+            });
         }
-        myLabel.setText("Bluetooth Device Found");
+        bluetoothOnOff =true;
     }
 
     void openBT() throws IOException
@@ -144,7 +189,7 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
 
         beginListenForData();
 
-        myLabel.setText("Bluetooth Opened");
+
     }
 
     void beginListenForData()
@@ -182,7 +227,9 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
                                     {
                                         public void run()
                                         {
-                                            myLabel.setText(data);
+//                                            myLabel.setText(data);
+                                            Toast.makeText(FriendsActivity.this,data, Toast.LENGTH_SHORT).show();
+
                                         }
                                     });
                                 }
@@ -204,20 +251,26 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         workerThread.start();
     }
 
-    void sendData() throws IOException
+    void sendData(String message) throws IOException
     {
-        String msg = myTextbox.getText().toString();
+        String msg = message;
         msg += "\n";
         mmOutputStream.write(msg.getBytes());
-        myLabel.setText("Data Sent");
+
     }
 
     void closeBT() throws IOException
     {
-        stopWorker = true;
-        mmOutputStream.close();
-        mmInputStream.close();
-        mmSocket.close();
-        myLabel.setText("Bluetooth Closed");
+        try {
+            stopWorker = true;
+            mmOutputStream.close();
+            mmInputStream.close();
+            mmSocket.close();
+            bluetoothOnOff = false;
+        }
+        catch (NullPointerException e)
+        {
+            //
+        }
     }
 }

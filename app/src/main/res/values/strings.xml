@@ -49,4 +49,11 @@
 
     <string name="cancelText">Cancel</string>
     <string name="addText">Add</string>
+    <string name="finalAnswer">Final Answer</string>
+    <string name="distanceText">Set up radius:</string>
+    <string name="closeText">Close</string>
+
+    <string name="showAllUsersText">Show all users:</string>
+
+
 </resources>

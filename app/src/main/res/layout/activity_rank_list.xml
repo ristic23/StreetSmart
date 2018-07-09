@@ -37,7 +37,7 @@
             app:layout_constraintBottom_toTopOf="@+id/middleGuideLine2"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Ime Prezime"
+            android:textColor="#000000"
             android:gravity="center"/>
 
         <android.support.constraint.Guideline
@@ -78,7 +78,7 @@
             app:layout_constraintBottom_toTopOf="@+id/middleGuideLine3"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Ime Prezime"
+            android:textColor="#000000"
             android:gravity="center"/>
 
         <android.support.constraint.Guideline
@@ -118,7 +118,7 @@
             app:layout_constraintBottom_toTopOf="@+id/middleGuideLine4"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="Ime Prezime"
+            android:textColor="#000000"
             android:gravity="center"/>
 
         <android.support.constraint.Guideline

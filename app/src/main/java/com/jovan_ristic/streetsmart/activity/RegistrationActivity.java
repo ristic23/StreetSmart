@@ -114,6 +114,11 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
                     Toast.makeText(getApplicationContext(), "Enter confirm password!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(!passwordS.equalsIgnoreCase(confirmPasswordS))
+                if (TextUtils.isEmpty(confirmPasswordS)) {
+                    Toast.makeText(getApplicationContext(), "Passwords not equal!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (TextUtils.isEmpty(phoneNumberS)) {
                     Toast.makeText(getApplicationContext(), "Enter phone number!", Toast.LENGTH_SHORT).show();
                     return;
