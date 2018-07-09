@@ -57,16 +57,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         String title = arrayQuestion.get(position).getHeaderQ();
         textQuestion.setText(title);
         try {
-            if (editQuestion != null)
-            {
-                editQuestion.setOnClickListener(new View.OnClickListener() {
+                textQuestion.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v)
                     {
-
+                        profileActivity.showPickedQuestion(position);
                     }
                 });
-            }
             if(deleteQuestion != null)
             {
                 deleteQuestion.setOnClickListener(new View.OnClickListener() {

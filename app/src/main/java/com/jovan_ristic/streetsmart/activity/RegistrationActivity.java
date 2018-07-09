@@ -1,12 +1,14 @@
 package com.jovan_ristic.streetsmart.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +22,21 @@ import com.jovan_ristic.streetsmart.Model.Friend;
 import com.jovan_ristic.streetsmart.Model.Question;
 import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
+import com.jovan_ristic.streetsmart.helpers.GlideApp;
 
 import java.util.ArrayList;
 
 public class RegistrationActivity extends AppCompatActivity  implements View.OnClickListener
 {
+    private final int CAMERA_CODE = 54;
+
 
     TextView btnBack, btnFinish;
     private FirebaseAuth auth;
 
     EditText firstName, lastName, userName, password, confirmPassword, phoneNumber, email;
+
+    ImageView btnCamera, profilePhoto, btnGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         auth = FirebaseAuth.getInstance();
@@ -53,6 +61,8 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
     private void initListeners() {
         btnBack.setOnClickListener(this);
         btnFinish.setOnClickListener(this);
+
+        btnCamera.setOnClickListener(this);
 
     }
 
@@ -68,19 +78,57 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         phoneNumber = findViewById(R.id.phoneNumberEditText);
         email = findViewById(R.id.emailEditText);
 
-
+        btnCamera = findViewById(R.id.cameraImg);
+        btnGallery = findViewById(R.id.galleryImg);
+        profilePhoto = findViewById(R.id.pickedImg);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+        {
+            switch (requestCode)
+            {
+                case CAMERA_CODE:
+                {
+                    SharedPreferences sharedPrefPicture = RegistrationActivity.this.getSharedPreferences("PHOTO_DATA", MODE_PRIVATE);
+                    String path = sharedPrefPicture.getString("PhotoPath", "");
+                    try
+                    {
+                        if(profilePhoto != null) {
+                            GlideApp.with(RegistrationActivity.this).load(path).into(profilePhoto);
+                            btnCamera.setVisibility(View.GONE);
+                            btnGallery.setVisibility(View.GONE);
+                            profilePhoto.setVisibility(View.VISIBLE);
+
+                        }
+
+                    }
+                    catch(Exception|OutOfMemoryError outOfMemoryError)
+                    {
+                        //
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     @Override
     public void onClick(View view)
     {
-        Intent intent;
         switch (view.getId())
         {
             case R.id.backBtn:
             {
                 onBackPressed();
+                break;
+            }
+            case R.id.cameraImg:
+            {
+                Intent cameraIntent = new Intent(RegistrationActivity.this, CameraActivity.class);
+                startActivityForResult(cameraIntent, CAMERA_CODE);
                 break;
             }
             case R.id.finishBtn:

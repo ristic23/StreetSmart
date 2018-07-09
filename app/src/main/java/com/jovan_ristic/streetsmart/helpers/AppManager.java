@@ -78,10 +78,10 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
         return AppInstance;
     }
 
-    int indexQ, countQ;
+    int  countQ;
     public void DefaultValues()
     {
-        countQ = 100000;indexQ = 0;
+        countQ = 100000;
         questionsMarkers = new ArrayList<>();
         questionsData = new ArrayList<>();
         questionsDataUsers = new ArrayList<>();
@@ -91,8 +91,8 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
         myLocationMarker = null;
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
-//        mDatabase.child("LyQ3ywRD1FPrjERwBGvzFiHTvLt2").removeValue();
-//        mDatabase.child("MLZGqygPPKgNHYKaYR95zZ1i5063").removeValue();
+        mDatabase.child("bZ3UoEJ6bzXjfl2HZmucLW19HwU2").removeValue();
+        mDatabase.child("bZjk3TSDfHRh8jcoKZGwmVxYEsF3").removeValue();
 //        mDatabase.child("N0xHVL3oRUYQb0etD4AYDpF6L5X2").removeValue();
         databaseReference = mDatabase.child(auth.getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -160,7 +160,7 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
             } else {
                 questionsMarkersUsers = new ArrayList<>();
             }
-
+            countQ = 100000;
             for (Map.Entry<String, Object> entry : users.entrySet()) {
                 Map singleUser = (Map) entry.getValue();
                 LatLng myCoordinate = new LatLng((double) singleUser.get("latitude"), (double) singleUser.get("longitude"));
@@ -176,13 +176,13 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
 
 
                     ArrayList<HashMap> tempQs = (ArrayList<HashMap>) singleUser.get("activeQuestions");
+                if(tempQs != null) {
                     for (int i = 0; i < tempQs.size(); i++) {
                         Question newQuestion = new Question();
                         newQuestion.setLongitude((double) (tempQs.get(i).get("longitude")));
                         newQuestion.setLatitude((double) (tempQs.get(i).get("latitude")));
                         distanceCalculated = distance(latitude, longitude, newQuestion.getLatitude(), newQuestion.getLongitude());
-                        if (radiusSet == -1 || (radiusSet) >= distanceCalculated)
-                        {
+                        if (radiusSet == -1 || (radiusSet) >= distanceCalculated) {
                             newQuestion.setHeaderQ(String.valueOf(tempQs.get(i).get("headerQ")));
                             newQuestion.setBodyQ(String.valueOf(tempQs.get(i).get("bodyQ")));
                             newQuestion.setaA(String.valueOf(tempQs.get(i).get("aA")));
@@ -198,9 +198,9 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
                             LatLng myCoordinate2 = new LatLng(newQuestion.getLatitude(), newQuestion.getLongitude());
                             questionsMarkersUsers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate2).title(newQuestion.getHeaderQ())
                                     .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
-                            questionsMarkersUsers.get(indexQ).setTag(countQ);
+                            questionsMarkersUsers.get(questionsMarkersUsers.size()-1).setTag(countQ);
                             countQ++;
-                            indexQ++;
+                        }
                     }
                 }
             }
@@ -212,31 +212,31 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
         }
     }
 
-    public void setQuestionMarkers()
-    {
-        if(questionsMarkers != null)
-        {
-            for (Marker ma: questionsMarkers)
-            {
-                ma.remove();
-                indexQ = 0;
-                countQ = 100000;
-            }
-        }
-        else
-        {
-            questionsMarkers = new ArrayList<>();
-        }
-        for (Question ma: questionsData)
-        {
-            LatLng myCoordinate = new LatLng(ma.getLatitude(), ma.getLongitude());
-            if (googleMapAppManager != null) {
-                questionsMarkers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate).title(ma.getHeaderQ())
-                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
-
-            }
-        }
-    }
+//    public void setQuestionMarkers()
+//    {
+//        if(questionsMarkers != null)
+//        {
+//            for (Marker ma: questionsMarkers)
+//            {
+//                ma.remove();
+//                indexQ = 0;
+//                countQ = 100000;
+//            }
+//        }
+//        else
+//        {
+//            questionsMarkers = new ArrayList<>();
+//        }
+//        for (Question ma: questionsData)
+//        {
+//            LatLng myCoordinate = new LatLng(ma.getLatitude(), ma.getLongitude());
+//            if (googleMapAppManager != null) {
+//                questionsMarkers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate).title(ma.getHeaderQ())
+//                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
+//
+//            }
+//        }
+//    }
 
     @Override
     public boolean onMarkerClick(Marker marker)
@@ -244,8 +244,7 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
         Integer clickCount = (Integer) marker.getTag();
         if(clickCount != null)
         {
-            Question temp = questionsData.get(clickCount % 100000);
-            mapActivity.markerIsClicked(temp);
+            mapActivity.markerIsClicked(questionsData.get(clickCount % 100000));
         }
         return false;
     }

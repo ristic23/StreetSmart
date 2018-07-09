@@ -24,6 +24,7 @@ public class EditProfileActivity extends AppCompatActivity  implements View.OnCl
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         initLayout();
         initListeners();

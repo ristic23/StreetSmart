@@ -72,6 +72,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         gps = new GPSTracker(this);
         auth = FirebaseAuth.getInstance();
@@ -111,7 +112,8 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
 
                 if(user.getActiveQuestions().size() > 0) {
                     AppManager.getInstance().setQuestionsData(user.getActiveQuestions());
-                    AppManager.getInstance().setQuestionMarkers();
+//                    AppManager.getInstance().setQuestionMarkers();
+                    AppManager.getInstance().getUsersLocation();
                 }
             }
 
@@ -391,7 +393,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
 
                     user.addNewQuestion(newQuestion);
                     Ref.child("activeQuestions").setValue(user.getActiveQuestions());
-                    AppManager.getInstance().setQuestionMarkers();
+//                    AppManager.getInstance().setQuestionMarkers();
                     addQuestionPopUp.setVisibility(View.GONE);
                 }
                 else
@@ -443,7 +445,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                 answerB.setText("");
                 answerC.setText("");
                 answerD.setText("");
-
+                btnAdd.setText(getResources().getString(R.string.addText));
                 break;
             }
         }
@@ -480,7 +482,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
         answerB.setFocusable(false);
         answerC.setFocusable(false);
         answerD.setFocusable(false);
-
+        btnAdd.setText("Confirm");
         addQuestionPopUp.setVisibility(View.VISIBLE);
     }
 

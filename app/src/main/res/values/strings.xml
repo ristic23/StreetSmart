@@ -2,6 +2,9 @@
     <string name="app_name">Street Smart</string>
 
     <string name="errorMsg">Error occurred please try again</string>
+    <string name="errorNoCameraMsg">Device has no camera!!!</string>
+
+
 
     <string name="haveFunText">You want to have fun?</string>
     <string name="signInThenText">***Sign in then***</string>

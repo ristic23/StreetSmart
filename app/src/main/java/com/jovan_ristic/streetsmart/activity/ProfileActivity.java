@@ -2,11 +2,13 @@ package com.jovan_ristic.streetsmart.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +47,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
 
+    private TextView headerQuestion, bodyQuestion, answerA, answerB, answerC, answerD, btnCloseQuestionPopUp;
+    private CheckBox checkA, checkB, checkC, checkD;
+    private ConstraintLayout questionPopUp;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         user = new User();
         initLayout();
@@ -116,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         friendsNumber.setOnClickListener(this);
         rankNumber.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
+        btnCloseQuestionPopUp.setOnClickListener(this);
     }
 
     private void initLayout() {
@@ -140,6 +149,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         questionsRecyclerView.setLayoutManager(questionsLayoutManager);
         questionsAdapter = new QuestionAdapter(ProfileActivity.this, user.getActiveQuestions(),ProfileActivity.this);
         questionsRecyclerView.setAdapter(questionsAdapter);
+
+        headerQuestion = (TextView) findViewById(R.id.titleQuestion);
+        bodyQuestion = (TextView) findViewById(R.id.questionBody);
+        answerA = (TextView) findViewById(R.id.answerA);
+        answerB = (TextView) findViewById(R.id.answerB);
+        answerC = (TextView) findViewById(R.id.answerC);
+        answerD = (TextView) findViewById(R.id.answerD);
+
+        checkA = (CheckBox) findViewById(R.id.checkA);
+        checkB = (CheckBox) findViewById(R.id.checkB);
+        checkC = (CheckBox) findViewById(R.id.checkC);
+        checkD = (CheckBox) findViewById(R.id.checkD);
+        questionPopUp = findViewById(R.id.questionPopUp);
+
+        btnCloseQuestionPopUp = (TextView) findViewById(R.id.backBtn);
     }
 
 
@@ -195,12 +219,44 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             }
+            case R.id.backBtn:
+            {
+                questionPopUp.setVisibility(View.GONE);
+                break;
+            }
         }
+    }
+
+    public void showPickedQuestion(int position)
+    {
+        Question tempQ = user.getActiveQuestions().get(position);
+
+        headerQuestion.setText(tempQ.getHeaderQ());
+        bodyQuestion.setText(tempQ.getBodyQ());
+        answerA.setText(tempQ.getaA());
+        answerB.setText(tempQ.getaB());
+        answerC.setText(tempQ.getaC());
+        answerD.setText(tempQ.getaD());
+
+        checkA.setChecked(tempQ.isBooleanA());
+        checkB.setChecked(tempQ.isBooleanB());
+        checkC.setChecked(tempQ.isBooleanC());
+        checkD.setChecked(tempQ.isBooleanD());
+
+        questionPopUp.setVisibility(View.VISIBLE);
     }
 
     public void deleteQuestion(int position)
     {
+        boolean checkIfLast = false;
+        if(user.getActiveQuestions().size() == 1)
+            checkIfLast = true;
         Ref.child("activeQuestions").setValue(user.getActiveQuestions().remove(position));
+        if(checkIfLast)
+        {
+            user.setActiveQuestions(new ArrayList<Question>());
+            Ref.child("activeQuestions").setValue(user.getActiveQuestions());
+        }
         questionsAdapter.notifyDataSetChanged();
     }
 

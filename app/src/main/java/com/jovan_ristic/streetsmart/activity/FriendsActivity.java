@@ -59,6 +59,7 @@ public class FriendsActivity extends AppCompatActivity implements View.OnClickLi
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         bluetoothOnOff = false;
         devicesBluetooth = new ArrayList<>();

@@ -24,6 +24,7 @@ public class ForgotPasswordActivity extends AppCompatActivity  implements View.O
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         initLayout();
         initListeners();

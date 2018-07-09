@@ -60,6 +60,7 @@ public class RankListActivity extends AppCompatActivity implements View.OnClickL
         catch(Exception | OutOfMemoryError e)
         {
             Toast.makeText(this, getResources().getString(R.string.errorMsg), Toast.LENGTH_SHORT).show();
+            finish();
         }
         auth = FirebaseAuth.getInstance();
         initLayout();
