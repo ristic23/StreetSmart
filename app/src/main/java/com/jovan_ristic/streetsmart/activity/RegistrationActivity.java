@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jovan_ristic.streetsmart.Model.Friend;
 import com.jovan_ristic.streetsmart.Model.Question;
 import com.jovan_ristic.streetsmart.Model.User;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 public class RegistrationActivity extends AppCompatActivity  implements View.OnClickListener
 {
     private final int CAMERA_CODE = 54;
-
+    private final int GALLERY_CODE = 55;
 
     TextView btnBack, btnFinish;
     private FirebaseAuth auth;
@@ -63,6 +66,7 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
         btnFinish.setOnClickListener(this);
 
         btnCamera.setOnClickListener(this);
+        btnGallery.setOnClickListener(this);
 
     }
 
@@ -92,28 +96,42 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
             {
                 case CAMERA_CODE:
                 {
-                    SharedPreferences sharedPrefPicture = RegistrationActivity.this.getSharedPreferences("PHOTO_DATA", MODE_PRIVATE);
-                    String path = sharedPrefPicture.getString("PhotoPath", "");
-                    try
-                    {
-                        if(profilePhoto != null) {
-                            GlideApp.with(RegistrationActivity.this).load(path).into(profilePhoto);
-                            btnCamera.setVisibility(View.GONE);
-                            btnGallery.setVisibility(View.GONE);
-                            profilePhoto.setVisibility(View.VISIBLE);
 
-                        }
-
-                    }
-                    catch(Exception|OutOfMemoryError outOfMemoryError)
-                    {
-                        //
-                    }
+                    readImage();
+                    break;
+                }
+                case GALLERY_CODE:
+                {
+                    readImage();
                     break;
                 }
             }
         }
     }
+
+    private void readImage()
+    {
+        SharedPreferences sharedPrefPicture = RegistrationActivity.this.getSharedPreferences("PHOTO_DATA", MODE_PRIVATE);
+        String path = sharedPrefPicture.getString("PhotoPath", "");
+        try
+        {
+            if(profilePhoto != null)
+            {
+                if(sharedPrefPicture.getBoolean("CameraSet", false))
+                    profilePhoto.setRotation(90f);
+                GlideApp.with(RegistrationActivity.this).load(path).into(profilePhoto);
+                btnCamera.setVisibility(View.GONE);
+                btnGallery.setVisibility(View.GONE);
+                profilePhoto.setVisibility(View.VISIBLE);
+
+            }
+        }
+        catch(Exception|OutOfMemoryError outOfMemoryError)
+        {
+            //
+        }
+    }
+
 
     @Override
     public void onClick(View view)
@@ -129,6 +147,12 @@ public class RegistrationActivity extends AppCompatActivity  implements View.OnC
             {
                 Intent cameraIntent = new Intent(RegistrationActivity.this, CameraActivity.class);
                 startActivityForResult(cameraIntent, CAMERA_CODE);
+                break;
+            }
+            case R.id.galleryImg:
+            {
+                Intent galleryIntent = new Intent(RegistrationActivity.this, GalleryActivity.class);
+                startActivityForResult(galleryIntent, GALLERY_CODE);
                 break;
             }
             case R.id.finishBtn:

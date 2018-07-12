@@ -49,6 +49,7 @@ public class RankListActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<RankUser> rankUsers;
 
     private TextView firstPlace, secondPlace, thirdPlace;
+    private String myUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +69,21 @@ public class RankListActivity extends AppCompatActivity implements View.OnClickL
         database = FirebaseDatabase.getInstance();
         parRef = database.getReference("users");
         Ref = parRef.child(auth.getUid());
+        Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                myUserName = dataSnapshot.getValue(User.class).getUserName();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         parRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 collectLocationUsers((Map<String,Object>) dataSnapshot.getValue());
             }
 
@@ -123,14 +135,29 @@ public class RankListActivity extends AppCompatActivity implements View.OnClickL
         }
         rankUsers = new ArrayList<>();
         for (int i = 0; i < n; i++)
-            rankUsers.add(arr[i]);
+        {
+            if(arr[i].userName.equalsIgnoreCase(myUserName))
+            {
+                Ref.child("rank").setValue(i+1);
+            }
 
-        firstPlace.setText(rankUsers.get(0).userName + "  -  " + String.valueOf(rankUsers.get(0).points));
-        secondPlace.setText(rankUsers.get(1).userName + "  -  " + String.valueOf(rankUsers.get(1).points));
-        thirdPlace.setText(rankUsers.get(2).userName + "  -  " + String.valueOf(rankUsers.get(2).points));
-        rankUsers.remove(0);
-        rankUsers.remove(1);
-        rankUsers.remove(2);
+            rankUsers.add(arr[i]);
+        }
+        if(rankUsers.size() > 0)
+            firstPlace.setText(rankUsers.get(0).userName + "  -  " + String.valueOf(rankUsers.get(0).points));
+        if(rankUsers.size() > 1)
+            secondPlace.setText(rankUsers.get(1).userName + "  -  " + String.valueOf(rankUsers.get(1).points));
+        if(rankUsers.size() > 2)
+        {
+            thirdPlace.setText(rankUsers.get(2).userName + "  -  " + String.valueOf(rankUsers.get(2).points));
+            rankUsers.remove(2);
+        }
+        if(rankUsers.size() > 1)
+            rankUsers.remove(1);
+        if(rankUsers.size() > 0)
+            rankUsers.remove(0);
+
+
 
         rankListAdapter.setList(rankUsers);
     }

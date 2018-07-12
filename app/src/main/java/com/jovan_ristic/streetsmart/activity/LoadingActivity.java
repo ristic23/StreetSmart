@@ -9,8 +9,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.jovan_ristic.streetsmart.R;
-import com.jovan_ristic.streetsmart.helpers.AppManager;
-import com.jovan_ristic.streetsmart.helpers.GPSTracker;
 
 public class LoadingActivity extends AppCompatActivity {
 

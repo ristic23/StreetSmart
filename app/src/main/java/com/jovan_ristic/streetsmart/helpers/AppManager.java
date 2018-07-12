@@ -91,9 +91,8 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
         myLocationMarker = null;
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
-        mDatabase.child("bZ3UoEJ6bzXjfl2HZmucLW19HwU2").removeValue();
-        mDatabase.child("bZjk3TSDfHRh8jcoKZGwmVxYEsF3").removeValue();
-//        mDatabase.child("N0xHVL3oRUYQb0etD4AYDpF6L5X2").removeValue();
+//        mDatabase.child("SCfL29gz7aWBtr0vCjv6vXXyCkL2").removeValue();
+//        mDatabase.child("TRNQnDzPlzZVdEow1b1IGkwEIGD3").removeValue();
         databaseReference = mDatabase.child(auth.getUid());
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -177,29 +176,31 @@ public class AppManager implements GoogleMap.OnMarkerClickListener
 
                     ArrayList<HashMap> tempQs = (ArrayList<HashMap>) singleUser.get("activeQuestions");
                 if(tempQs != null) {
-                    for (int i = 0; i < tempQs.size(); i++) {
-                        Question newQuestion = new Question();
-                        newQuestion.setLongitude((double) (tempQs.get(i).get("longitude")));
-                        newQuestion.setLatitude((double) (tempQs.get(i).get("latitude")));
-                        distanceCalculated = distance(latitude, longitude, newQuestion.getLatitude(), newQuestion.getLongitude());
-                        if (radiusSet == -1 || (radiusSet) >= distanceCalculated) {
-                            newQuestion.setHeaderQ(String.valueOf(tempQs.get(i).get("headerQ")));
-                            newQuestion.setBodyQ(String.valueOf(tempQs.get(i).get("bodyQ")));
-                            newQuestion.setaA(String.valueOf(tempQs.get(i).get("aA")));
-                            newQuestion.setaB(String.valueOf(tempQs.get(i).get("aB")));
-                            newQuestion.setaC(String.valueOf(tempQs.get(i).get("aC")));
-                            newQuestion.setaD(String.valueOf(tempQs.get(i).get("aD")));
-                            newQuestion.setBooleanA((boolean) (tempQs.get(i).get("booleanA")));
-                            newQuestion.setBooleanB((boolean) (tempQs.get(i).get("booleanB")));
-                            newQuestion.setBooleanC((boolean) (tempQs.get(i).get("booleanC")));
-                            newQuestion.setBooleanD((boolean) (tempQs.get(i).get("booleanD")));
+                    if (!myUserName.equalsIgnoreCase(name) && googleMapAppManager != null) {
+                        for (int i = 0; i < tempQs.size(); i++) {
+                            Question newQuestion = new Question();
+                            newQuestion.setLongitude((double) (tempQs.get(i).get("longitude")));
+                            newQuestion.setLatitude((double) (tempQs.get(i).get("latitude")));
+                            distanceCalculated = distance(latitude, longitude, newQuestion.getLatitude(), newQuestion.getLongitude());
+                            if (radiusSet == -1 || (radiusSet) >= distanceCalculated) {
+                                newQuestion.setHeaderQ(String.valueOf(tempQs.get(i).get("headerQ")));
+                                newQuestion.setBodyQ(String.valueOf(tempQs.get(i).get("bodyQ")));
+                                newQuestion.setaA(String.valueOf(tempQs.get(i).get("aA")));
+                                newQuestion.setaB(String.valueOf(tempQs.get(i).get("aB")));
+                                newQuestion.setaC(String.valueOf(tempQs.get(i).get("aC")));
+                                newQuestion.setaD(String.valueOf(tempQs.get(i).get("aD")));
+                                newQuestion.setBooleanA((boolean) (tempQs.get(i).get("booleanA")));
+                                newQuestion.setBooleanB((boolean) (tempQs.get(i).get("booleanB")));
+                                newQuestion.setBooleanC((boolean) (tempQs.get(i).get("booleanC")));
+                                newQuestion.setBooleanD((boolean) (tempQs.get(i).get("booleanD")));
 
-                            questionsData.add(newQuestion);
-                            LatLng myCoordinate2 = new LatLng(newQuestion.getLatitude(), newQuestion.getLongitude());
-                            questionsMarkersUsers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate2).title(newQuestion.getHeaderQ())
-                                    .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
-                            questionsMarkersUsers.get(questionsMarkersUsers.size()-1).setTag(countQ);
-                            countQ++;
+                                questionsData.add(newQuestion);
+                                LatLng myCoordinate2 = new LatLng(newQuestion.getLatitude(), newQuestion.getLongitude());
+                                questionsMarkersUsers.add(googleMapAppManager.addMarker(new MarkerOptions().position(myCoordinate2)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapForQuestion(mQuestionImageView, R.drawable.question_marker)))));
+                                questionsMarkersUsers.get(questionsMarkersUsers.size() - 1).setTag(countQ);
+                                countQ++;
+                            }
                         }
                     }
                 }

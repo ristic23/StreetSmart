@@ -1,6 +1,7 @@
 package com.jovan_ristic.streetsmart.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.jovan_ristic.streetsmart.Model.User;
 import com.jovan_ristic.streetsmart.R;
 import com.jovan_ristic.streetsmart.adapter.QuestionAdapter;
 import com.jovan_ristic.streetsmart.helpers.AppManager;
+import com.jovan_ristic.streetsmart.helpers.GlideApp;
 
 import org.w3c.dom.Text;
 
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
     ImageView btnMap, btnFriends, btnRankList, btnEdit;
-    ImageView btnLogOut;
+    ImageView btnLogOut, profileImage;
 
     TextView rankNumber, friendsNumber, questionsNumber;
     TextView firstName, lastName, phone;
@@ -67,7 +69,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         user = new User();
         initLayout();
         initListeners();
-
+        try
+        {
+            SharedPreferences sharedPrefPicture = ProfileActivity.this.getSharedPreferences("PHOTO_DATA", MODE_PRIVATE);
+            String path = sharedPrefPicture.getString("PhotoPath", "");
+            if(profileImage != null)
+            {
+                if(sharedPrefPicture.getBoolean("CameraSet", false))
+                    profileImage.setRotation(90f);
+                GlideApp.with(ProfileActivity.this).load(path).into(profileImage);
+            }
+        }
+        catch(Exception|OutOfMemoryError outOfMemoryError)
+        {
+            Toast.makeText(this, "Error loading profileimage", Toast.LENGTH_SHORT).show();
+        }
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("users");
         Ref = mDatabase.child(auth.getUid());
@@ -132,6 +148,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         btnFriends = findViewById(R.id.friends_btn);
         btnRankList = findViewById(R.id.rankList_btn);
         btnEdit = findViewById(R.id.editBtn);
+
+        profileImage = findViewById(R.id.profileImage);
 
         friendsNumber = findViewById(R.id.friendsNumber);
         rankNumber = findViewById(R.id.rankNumber);

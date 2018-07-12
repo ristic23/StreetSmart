@@ -98,6 +98,7 @@ public class CameraActivity extends AppCompatActivity
                 SharedPreferences sharedPrefPicture = CameraActivity.this.getSharedPreferences("PHOTO_DATA", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPrefPicture.edit();
                 editor.putString("PhotoPath", pictureFile.getAbsolutePath());
+                editor.putBoolean("CameraSet", true);
                 editor.apply();
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);

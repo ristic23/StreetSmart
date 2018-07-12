@@ -156,7 +156,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w, 1:1"
             android:layout_margin="@dimen/_5sdp"
-            android:rotation="90"
             android:visibility="gone"/>
         <ImageView
             android:id="@+id/galleryImg"

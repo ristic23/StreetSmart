@@ -20,7 +20,7 @@ import com.jovan_ristic.streetsmart.R;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
 
-    TextView btnSignIn, btnRegistration, btnForgotPassword;
+    TextView btnSignIn, btnRegistration;
 
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
@@ -49,13 +49,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initListeners() {
         btnSignIn.setOnClickListener(this);
         btnRegistration.setOnClickListener(this);
-        btnForgotPassword.setOnClickListener(this);
+
     }
 
     private void initLayout() {
         btnSignIn = findViewById(R.id.signInBtn);
         btnRegistration = findViewById(R.id.registrationText);
-        btnForgotPassword = findViewById(R.id.forgotPasswordText);
+
 
         inputEmail = findViewById(R.id.editTextUserName);
         inputPassword = findViewById(R.id.editTextPassword);
@@ -111,12 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.registrationText:
             {
                 intent = new Intent(MainActivity.this, RegistrationActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.forgotPasswordText:
-            {
-                intent = new Intent(MainActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
                 break;
             }

@@ -109,6 +109,7 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                 user.setRank(dataSnapshot.getValue(User.class).getRank());
                 user.setFriendsList(dataSnapshot.getValue(User.class).getFriendsList());
                 user.setActiveQuestions(dataSnapshot.getValue(User.class).getActiveQuestions());
+                user.setTotalPoints(dataSnapshot.getValue(User.class).getTotalPoints());
 
                 if(user.getActiveQuestions().size() > 0) {
                     AppManager.getInstance().setQuestionsData(user.getActiveQuestions());
@@ -398,27 +399,39 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
                 }
                 else
                 {
-                    if(questionPicked.isBooleanA() && checkA.isChecked())
+                    if(checkA.isChecked())
                     {
-                       correctAnswer();
+                        if(questionPicked.isBooleanA())
+                            correctAnswer();
+                        else
+                            Toast.makeText(getApplicationContext(), "Incorrect answer!", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
-                        if(questionPicked.isBooleanB() && checkB.isChecked())
+                        if(checkB.isChecked())
                         {
-                            correctAnswer();
+                            if(questionPicked.isBooleanB())
+                                correctAnswer();
+                            else
+                                Toast.makeText(getApplicationContext(), "Incorrect answer!", Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-                            if(questionPicked.isBooleanC() && checkC.isChecked())
+                            if(checkC.isChecked())
                             {
-                                correctAnswer();
+                                if(questionPicked.isBooleanC())
+                                    correctAnswer();
+                                else
+                                    Toast.makeText(getApplicationContext(), "Incorrect answer!", Toast.LENGTH_SHORT).show();
                             }
                             else
                             {
-                                if(questionPicked.isBooleanD() && checkD.isChecked())
+                                if(checkD.isChecked())
                                 {
-                                    correctAnswer();
+                                    if(questionPicked.isBooleanD())
+                                        correctAnswer();
+                                    else
+                                        Toast.makeText(getApplicationContext(), "Incorrect answer!", Toast.LENGTH_SHORT).show();
                                 }
                                 else
                                 {
@@ -454,8 +467,9 @@ public class MapActivity extends AppCompatActivity  implements View.OnClickListe
     private void correctAnswer()
     {
         Toast.makeText(getApplicationContext(), "You won 10 points!", Toast.LENGTH_LONG).show();
-
-        Ref.child("totalPoints").setValue(user.getTotalPoints() + 10);
+        int points = user.getTotalPoints();
+        points += 10;
+        Ref.child("totalPoints").setValue(points);
         addQuestionPopUp.setVisibility(View.GONE);
         isMarkerClicked = false;
     }
